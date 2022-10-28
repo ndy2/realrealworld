@@ -6,7 +6,7 @@ import com.example.realworld.domain.user.model.inout.Login
 import com.example.realworld.domain.user.model.inout.Register
 import com.example.realworld.domain.user.model.inout.UserResponse
 import com.example.realworld.domain.user.repository.UserRepository
-import com.example.realworld.exception.BadCredentialException
+import com.example.realworld.exception.BadCredentialsException
 import com.example.realworld.exception.NotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -21,26 +21,26 @@ class AuthService(
 
     @Transactional(readOnly = true)
     fun login(login: Login): UserResponse {
-        val email = login.email
-        val password = login.password
+        val (email, password) = login
 
         userRepository.findByEmail(email)?.let {
             if (!passwordEncoder.matches(password, it.password)) {
-                throw BadCredentialException()
+                throw BadCredentialsException("login failure!")
             }
             return toResponse(it)
         }
         throw NotFoundException("no such user email : $email")
-
     }
 
     @Transactional
     fun register(register: Register): UserResponse {
+        val (email, password, username) = register
+
         //createUser
         val user = User(
-            register.email,
-            passwordEncoder.encode(register.password),
-            Profile(register.username)
+            email,
+            passwordEncoder.encode(password),
+            Profile(username)
         )
 
         //save user

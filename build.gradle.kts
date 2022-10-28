@@ -18,6 +18,7 @@ repositories {
 }
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-validation:2.7.5")
     implementation ("io.github.microutils:kotlin-logging-jvm:3.0.2")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

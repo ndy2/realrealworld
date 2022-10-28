@@ -3,11 +3,14 @@ package com.example.realworld.controller.user
 import com.example.realworld.domain.user.model.inout.Login
 import com.example.realworld.domain.user.model.inout.Register
 import com.example.realworld.domain.user.service.AuthService
-import com.fasterxml.jackson.annotation.JsonRootName
+import com.example.realworld.exception.BadCredentialsException
+import com.example.realworld.exception.NotFoundException
+import org.springframework.validation.Errors
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.validation.Valid
 
 @RequestMapping("/api/users")
 @RestController
@@ -17,9 +20,14 @@ class AuthController(
 
     @PostMapping("/login")
     fun login(
-        @RequestBody login: Login
+        @Valid @RequestBody login: Login,
+        errors: Errors
     ): Any {
-        return view(service.login(login))
+        try{
+            return view(service.login(login))
+        } catch (ex: NotFoundException){
+            throw BadCredentialsException("login failure!", ex)
+        }
     }
 
     @PostMapping
