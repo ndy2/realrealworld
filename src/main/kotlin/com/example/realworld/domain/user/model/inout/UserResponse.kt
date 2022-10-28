@@ -6,5 +6,10 @@ data class UserResponse(
     val username: String,
     val bio: String?,
     val image: String?,
-    val token: String,
-)
+    var token: String = ""
+) {
+    fun withToken(token: String): UserResponse {
+        this.token = token
+        return this
+    }
+}

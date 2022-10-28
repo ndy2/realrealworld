@@ -7,14 +7,12 @@ import com.nimbusds.jose.JWSSigner
 import com.nimbusds.jose.jwk.JWK
 import com.nimbusds.jwt.JWTClaimsSet
 import com.nimbusds.jwt.SignedJWT
-import org.springframework.security.core.authority.AuthorityUtils
 import org.springframework.security.core.userdetails.UserDetails
 import java.util.*
 
 
 abstract class SecuritySigner {
 
-    @Throws(JOSEException::class)
     protected fun getJwtTokenInternal(
         jwsSigner: JWSSigner,
         user: UserDetails,
@@ -22,14 +20,13 @@ abstract class SecuritySigner {
     ): String {
         val header = JWSHeader.Builder(jwk.algorithm as JWSAlgorithm).keyID(jwk.keyID).build()
 
-
-
         val jwtClaimsSet = JWTClaimsSet.Builder()
             .subject("user")
-            .issuer("http://localhost:8081")
-            .claim("username", user.username)
-            .claim("authority", AuthorityUtils.authorityListToSet(user.authorities).toList())
-            .expirationTime(Date(Date().time + 60 * 1000 * 5))
+            .issuer("REALWORLD API")
+            .issueTime(Date())
+            .expirationTime(Date(System.currentTimeMillis() + 10 * 24 * 60 * 60 * 1000)) // 10 days
+            .claim("userId", user.username)
+            .claim("authorities", user.authorities.joinToString { it.authority })
             .build()
         val signedJWT = SignedJWT(header, jwtClaimsSet)
         signedJWT.sign(jwsSigner)

@@ -23,13 +23,12 @@ class User(
     @OneToOne(cascade = [ALL], fetch = LAZY, optional = false)
     val profile: Profile
 ) {
-
     val username: String
         get() = this.profile.username
 
-
     val bio: String?
         get() = this.profile.bio
+
 
     val image: String?
         get() = this.profile.image
@@ -37,5 +36,18 @@ class User(
     @Id
     @GeneratedValue
     var id: Long = 0L
+
+    fun update(
+        email: String?,
+        password: String?,
+        username: String?,
+        bio: String?,
+        image: String?
+    ) {
+        if (email != null) this.email = email
+        if (password != null) this.password = password
+
+        profile.update(username, bio, image)
+    }
 
 }

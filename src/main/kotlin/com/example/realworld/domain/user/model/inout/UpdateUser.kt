@@ -6,33 +6,29 @@ import javax.validation.constraints.NotNull
 import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size
 
-
 @JsonRootName("user")
-class Register(
+data class UpdateUser(
 
-    @field:NotNull(message = "can't be missing")
     @field:Size(min = 1, message = "can't be empty")
     @field:Pattern(
         regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$",
         message = "must be a valid email"
     )
-    private val email: String?,
+    val email: String?,
 
-
-    @field:NotNull(message = "can't be missing")
     @field:Size(min = 1, message = "can't be empty")
-    private val password: String?,
+    val password: String?,
 
-    @field:NotNull(message = "can't be missing")
     @field:Size(min = 1, message = "can't be empty")
     @field:Pattern(regexp = "^\\w+$", message = "must be alphanumeric")
-    private val username: String?,
-) : SelfValidating<Register>() {
+    val username: String?,
+
+    val image: String?,
+
+    val bio: String?,
+
+    ) : SelfValidating<Login>() {
     init {
         validateSelf()
     }
-
-    operator fun component1() = email!!
-    operator fun component2() = password!!
-    operator fun component3() = username!!
 }

@@ -8,7 +8,6 @@ import org.springframework.security.core.authority.AuthorityUtils
 
 typealias SecurityUser = org.springframework.security.core.userdetails.User
 
-
 class JwtTokenProvider(
     private val securitySigner: SecuritySigner,
     private val jwk: JWK
@@ -16,7 +15,7 @@ class JwtTokenProvider(
 
     override fun getToken(user: User): String {
         val securityUser = SecurityUser(
-            user.username,
+            user.id.toString(),
             user.password,
             AuthorityUtils.createAuthorityList("ROLE_USER")
         )

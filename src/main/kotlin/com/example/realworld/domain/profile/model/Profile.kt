@@ -12,8 +12,13 @@ class Profile(
     var bio: String? = null,
     var image: String? = null,
 ) {
-
     @Id
     @GeneratedValue
     var id: Long = 0L
+
+    fun update(username: String?, bio: String?, image: String?) {
+        if (username != null) this.username = username
+        if (bio != null) this.bio = bio
+        if (image != null) this.image = image
+    }
 }

@@ -19,6 +19,8 @@ class Login(
     @field:NotNull(message = "can't be missing")
     @field:Size(min = 1, message = "can't be empty")
     private val password: String?,
+
+
 ) : SelfValidating<Login>() {
     init {
         validateSelf()
