@@ -7,6 +7,7 @@ import com.example.realworld.domain.user.model.inout.Register
 import com.example.realworld.domain.user.model.inout.UserResponse
 import com.example.realworld.domain.user.repository.UserRepository
 import com.example.realworld.exception.BadCredentialsException
+import com.example.realworld.exception.DuplicatedEmailException
 import com.example.realworld.exception.NotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -35,6 +36,10 @@ class AuthService(
     @Transactional
     fun register(register: Register): UserResponse {
         val (email, password, username) = register
+        //check duplicated user
+        if(userRepository.existsByEmail(email)){
+            throw DuplicatedEmailException()
+        }
 
         //createUser
         val user = User(

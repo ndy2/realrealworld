@@ -1,6 +1,7 @@
 package com.example.realworld.controller.user
 
 import com.example.realworld.exception.BadCredentialsException
+import com.example.realworld.exception.DuplicatedEmailException
 import com.example.realworld.exception.NotFoundException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -16,6 +17,12 @@ class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException::class)
     fun handleNotFound(ex: NotFoundException): Any {
         return mapOf("errors" to ex.message)
+    }
+
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(DuplicatedEmailException::class)
+    fun handleDuplicatedEmail(ex: DuplicatedEmailException): Any {
+        return mapOf("errors" to "email is duplicated")
     }
 
     @ResponseStatus(UNAUTHORIZED)
