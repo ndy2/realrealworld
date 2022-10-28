@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:realworld
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        show_sql: true
+        format_sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jackson:
+    deserialization:
+      unwrap-root-value: true
+
+#  security:
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          jws-algorithms: HS256
+logging:
+  level:
+    org.springframework.security: trace
+
