@@ -4,7 +4,7 @@ import com.example.realworld.domain.user.model.User
 import com.example.realworld.domain.user.service.TokenProvider
 import org.springframework.stereotype.Component
 
-@Component
+//@Component
 class NullTokenProvider
     : TokenProvider{
 
