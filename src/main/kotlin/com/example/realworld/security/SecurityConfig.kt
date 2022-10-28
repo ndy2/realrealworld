@@ -20,15 +20,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 class SecurityConfig(
-    @Qualifier("rsaJwtAuthorizationFilter")
     private val jwtAuthorizationFilter: JwtAuthorizationFilter,
     private val userDetailsService: UserDetailsService
 ) {
 
     @Bean
     fun jwtTokenProvider(
-        @Qualifier("rsaSecuritySigner") securitySigner: SecuritySigner,
-        @Qualifier("rsaKey") jwk: JWK
+        securitySigner: SecuritySigner,
+        jwk: JWK
     ): JwtTokenProvider {
         return JwtTokenProvider(securitySigner, jwk)
     }

@@ -21,12 +21,12 @@ spring:
     deserialization:
       unwrap-root-value: true
 
-#  security:
-#    oauth2:
-#      resourceserver:
-#        jwt:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
 #          jws-algorithms: HS256
-#          jws-algorithms: RS256
+          jws-algorithms: RS256
 logging:
   level:
     org.springframework.security: trace
