@@ -1,6 +1,12 @@
 package com.example.realworld.security
 
-import com.example.realworld.security.filter.JwtAuthorizationMacFilter
+import com.example.realworld.security.filter.JwtAuthorizationFilter
+import com.example.realworld.security.signature.SecuritySigner
+import com.example.realworld.security.token.JwtTokenProvider
+import com.nimbusds.jose.crypto.MACVerifier
+import com.nimbusds.jose.crypto.RSASSAVerifier
+import com.nimbusds.jose.jwk.JWK
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -14,9 +20,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 class SecurityConfig(
-    private val jwtAuthorizationMacFilter: JwtAuthorizationMacFilter,
+    @Qualifier("rsaJwtAuthorizationFilter")
+    private val jwtAuthorizationFilter: JwtAuthorizationFilter,
     private val userDetailsService: UserDetailsService
 ) {
+
+    @Bean
+    fun jwtTokenProvider(
+        @Qualifier("rsaSecuritySigner") securitySigner: SecuritySigner,
+        @Qualifier("rsaKey") jwk: JWK
+    ): JwtTokenProvider {
+        return JwtTokenProvider(securitySigner, jwk)
+    }
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
@@ -34,7 +49,7 @@ class SecurityConfig(
             .anyRequest().authenticated()
             .and()
             .userDetailsService(userDetailsService)
-            .addFilterBefore(jwtAuthorizationMacFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()
     }
 

@@ -1,9 +1,10 @@
 package com.example.realworld.security.signature
 
-import com.nimbusds.jose.JOSEException
 import com.nimbusds.jose.JWSAlgorithm
 import com.nimbusds.jose.JWSHeader
 import com.nimbusds.jose.JWSSigner
+import com.nimbusds.jose.crypto.MACVerifier
+import com.nimbusds.jose.crypto.RSASSAVerifier
 import com.nimbusds.jose.jwk.JWK
 import com.nimbusds.jwt.JWTClaimsSet
 import com.nimbusds.jwt.SignedJWT
@@ -11,9 +12,14 @@ import org.springframework.security.core.userdetails.UserDetails
 import java.util.*
 
 
-abstract class SecuritySigner {
+class SecuritySigner(
+    private val jwsSigner: JWSSigner
+) {
+    fun getJwtToken(user: UserDetails, jwk: JWK): String {
+        return getJwtTokenInternal(jwsSigner, user, jwk)
+    }
 
-    protected fun getJwtTokenInternal(
+    private fun getJwtTokenInternal(
         jwsSigner: JWSSigner,
         user: UserDetails,
         jwk: JWK
@@ -32,7 +38,4 @@ abstract class SecuritySigner {
         signedJWT.sign(jwsSigner)
         return signedJWT.serialize()
     }
-
-    @Throws(JOSEException::class)
-    abstract fun getJwtToken(user: UserDetails, jwk: JWK): String
 }

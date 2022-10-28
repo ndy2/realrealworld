@@ -26,6 +26,7 @@ spring:
 #      resourceserver:
 #        jwt:
 #          jws-algorithms: HS256
+#          jws-algorithms: RS256
 logging:
   level:
     org.springframework.security: trace

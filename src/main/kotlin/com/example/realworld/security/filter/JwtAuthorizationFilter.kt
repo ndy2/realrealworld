@@ -1,7 +1,6 @@
 package com.example.realworld.security.filter
 
-import com.nimbusds.jose.crypto.MACVerifier
-import com.nimbusds.jose.jwk.JWK
+import com.nimbusds.jose.JWSVerifier
 import com.nimbusds.jwt.SignedJWT
 import org.springframework.http.HttpStatus
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -12,8 +11,8 @@ import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class JwtAuthorizationMacFilter(
-    private val jwk: JWK
+class JwtAuthorizationFilter(
+    private val jwsVerifier: JWSVerifier
 ) : OncePerRequestFilter() {
 
     override fun doFilterInternal(
@@ -30,8 +29,7 @@ class JwtAuthorizationMacFilter(
         val signedJWT: SignedJWT
         try {
             signedJWT = SignedJWT.parse(token)
-            val macVerifier = MACVerifier(jwk.toOctetSequenceKey().toSecretKey())
-            val verify = signedJWT.verify(macVerifier)
+            val verify = signedJWT.verify(jwsVerifier)
             if (verify) {
                 val jwtClaimsSet = signedJWT.jwtClaimsSet
                 val userId = jwtClaimsSet.getClaim("userId") as String
