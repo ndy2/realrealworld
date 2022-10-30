@@ -27,12 +27,13 @@ open class SecuritySigner(
         val header = JWSHeader.Builder(jwk.algorithm as JWSAlgorithm).keyID(jwk.keyID).build()
 
         val jwtClaimsSet = JWTClaimsSet.Builder()
-            .subject("user")
+            .subject("userId")
             .issuer("REALWORLD API")
             .issueTime(Date())
             .expirationTime(Date(System.currentTimeMillis() + 10 * 24 * 60 * 60 * 1000)) // 10 days
             .claim("userId", user.username)
-            .claim("authorities", user.authorities.joinToString { it.authority })
+            .claim("role", user.authorities.joinToString { it.authority })
+            .claim("scope", "photo")
             .build()
         val signedJWT = SignedJWT(header, jwtClaimsSet)
         signedJWT.sign(jwsSigner)

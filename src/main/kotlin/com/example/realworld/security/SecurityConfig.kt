@@ -2,6 +2,7 @@ package com.example.realworld.security
 
 import com.example.realworld.security.filter.JwtAuthorizationFilter
 import com.example.realworld.security.signature.SecuritySigner
+import com.example.realworld.security.token.CustomJwtGrantedAuthoritiesConverter
 import com.example.realworld.security.token.JwtTokenProvider
 import com.nimbusds.jose.JWSAlgorithm
 import com.nimbusds.jose.jwk.JWK
@@ -15,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.NoOpPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
@@ -41,6 +43,9 @@ class SecurityConfig(
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
+        val authenticationConverter = JwtAuthenticationConverter()
+        authenticationConverter.setJwtGrantedAuthoritiesConverter(CustomJwtGrantedAuthoritiesConverter())
+
         return http
             .csrf().disable()
             .cors().disable()
@@ -57,6 +62,7 @@ class SecurityConfig(
             .userDetailsService(userDetailsService)
             .oauth2ResourceServer()
             .jwt()
+            .jwtAuthenticationConverter(authenticationConverter)
             .and()
             .and()
             .build()

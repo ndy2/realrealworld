@@ -17,7 +17,7 @@ class JwtTokenProvider(
         val securityUser = SecurityUser(
             user.id.toString(),
             user.password,
-            AuthorityUtils.createAuthorityList("ROLE_USER")
+            AuthorityUtils.createAuthorityList("user")
         )
 
         return securitySigner.getJwtToken(securityUser, jwk)

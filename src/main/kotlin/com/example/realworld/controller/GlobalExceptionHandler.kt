@@ -1,4 +1,4 @@
-package com.example.realworld.controller.user
+package com.example.realworld.controller
 
 import com.example.realworld.exception.BadCredentialsException
 import com.example.realworld.exception.DuplicatedEmailException
