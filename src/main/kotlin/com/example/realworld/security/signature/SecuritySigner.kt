@@ -12,11 +12,11 @@ import org.springframework.security.core.userdetails.UserDetails
 import java.util.*
 
 
-class SecuritySigner(
-    private val jwsSigner: JWSSigner
+open class SecuritySigner(
+    var jwsSigner: JWSSigner? = null
 ) {
     fun getJwtToken(user: UserDetails, jwk: JWK): String {
-        return getJwtTokenInternal(jwsSigner, user, jwk)
+        return getJwtTokenInternal(jwsSigner!!, user, jwk)
     }
 
     private fun getJwtTokenInternal(

@@ -25,8 +25,11 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-#          jws-algorithms: HS256
-          jws-algorithms: RS256
+#                    jws-algorithms: HS256
+#          jws-algorithms: RS256
+#          public-key-location: classpath:certs/realworld.cer
+          public-key-location: classpath:certs/publicKey.txt
+
 logging:
   level:
     org.springframework.security: trace

@@ -6,6 +6,7 @@ import com.example.realworld.domain.user.service.AuthService
 import com.example.realworld.exception.BadCredentialsException
 import com.example.realworld.exception.NotFoundException
 import org.springframework.validation.Errors
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -36,6 +37,7 @@ class AuthController(
     ): Any {
         return view(service.register(register))
     }
+
 
     fun view(userResponse: Any): Any = mapOf("user" to userResponse)
 }
