@@ -17,6 +17,15 @@ interface ProfileRepository : JpaRepository<Profile, Long> {
 
     fun findByUsername(username: String): Profile?
 
+    //@formatter:off
+    @Query(
+        "select p " +
+        "from Profile p " +
+        "join fetch p.following f " +
+        "where p.id = :id"
+    )
+    //@formatter:on
+    fun findByIdWithFollowing(id: Long): Profile?
 
     //@formatter:off
     @Query(

@@ -38,4 +38,12 @@ class Article(
     @Column(name = "updatedAt", nullable = false)
     var updatedAt: Instant = now()
 
+
+    val authorUsername: String
+        get() = author.username
+    val authorBio: String?
+        get() = author.bio
+    val authorImage: String?
+        get() = author.image
+
 }
