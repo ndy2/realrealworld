@@ -60,7 +60,7 @@ class SecurityConfig(
     }
 
     @Bean
-    fun jwtDecoderByPublicKeyValue(): JwtDecoder? {
+    fun jwtDecoder(): JwtDecoder? {
         val keyPair = generateRsaKeyPair()
         val publicKey = keyPair.public as RSAPublicKey
 
@@ -70,7 +70,8 @@ class SecurityConfig(
         return jwtDecoder
     }
 
-    private fun jwtEncoder(): JwtEncoder {
+    @Bean
+    fun jwtEncoder(): JwtEncoder {
         val rsaKey: RSAKey = generateRsaKey()
         val jwkSet = JWKSet(rsaKey)
 

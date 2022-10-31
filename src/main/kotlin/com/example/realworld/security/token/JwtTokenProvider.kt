@@ -24,6 +24,7 @@ class JwtTokenProvider(
             .issuedAt(Instant.now())
             .expiresAt(Instant.now().plus(5L, ChronoUnit.MINUTES))
             .claim("userId", user.id)
+            .claim("profileId", user.profile.id)
             .claim("role", "user")
             .claim("scope", "photo").build()
 
