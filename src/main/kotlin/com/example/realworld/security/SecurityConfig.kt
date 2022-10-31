@@ -1,5 +1,6 @@
 package com.example.realworld.security
 
+import com.example.realworld.security.token.CustomBearerTokenResolver
 import com.example.realworld.security.token.CustomJwtGrantedAuthoritiesConverter
 import com.example.realworld.security.token.JwtTokenProvider
 import com.nimbusds.jose.jwk.JWKSet
@@ -41,7 +42,7 @@ class SecurityConfig(
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-            .antMatchers("/", "/h2-console/**", "/error").permitAll()
+            .antMatchers("/", "/h2-console/**", "/error", "*.js").permitAll()
             .antMatchers(HttpMethod.POST, "/api/users", "/api/users/login").permitAll()
             .anyRequest().authenticated()
             .and()
@@ -50,6 +51,7 @@ class SecurityConfig(
             .jwt()
             .jwtAuthenticationConverter(authenticationConverter)
             .and()
+            .bearerTokenResolver(CustomBearerTokenResolver())
             .and()
             .build()
     }
