@@ -2,24 +2,30 @@ package com.example.realworld.security.token
 
 import com.example.realworld.domain.user.model.User
 import com.example.realworld.domain.user.service.TokenProvider
-import com.example.realworld.security.signature.SecuritySigner
-import com.nimbusds.jose.jwk.JWK
-import org.springframework.security.core.authority.AuthorityUtils
-
-typealias SecurityUser = org.springframework.security.core.userdetails.User
+import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm
+import org.springframework.security.oauth2.jwt.JwsHeader
+import org.springframework.security.oauth2.jwt.JwtClaimsSet
+import org.springframework.security.oauth2.jwt.JwtEncoder
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 
 class JwtTokenProvider(
-    private val securitySigner: SecuritySigner,
-    private val jwk: JWK
+    private val jwtEncoder: JwtEncoder
 ) : TokenProvider {
 
     override fun getToken(user: User): String {
-        val securityUser = SecurityUser(
-            user.id.toString(),
-            user.password,
-            AuthorityUtils.createAuthorityList("user")
-        )
+        val headers = JwsHeader.with(SignatureAlgorithm.RS256).build()
+        val claims = JwtClaimsSet.builder()
+            .issuer("REALWORLD API")
+            .subject("userId")
+            .issuedAt(Instant.now())
+            .expiresAt(Instant.now().plus(5L, ChronoUnit.MINUTES))
+            .claim("userId", user.id)
+            .claim("role", "user")
+            .claim("scope", "photo").build()
 
-        return securitySigner.getJwtToken(securityUser, jwk)
+        val jwt = jwtEncoder.encode(JwtEncoderParameters.from(headers, claims))
+        return jwt.tokenValue
     }
 }
