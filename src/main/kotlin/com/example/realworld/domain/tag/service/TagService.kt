@@ -9,6 +9,10 @@ class TagService(
     private val repository: TagRepository
 ) {
 
+    fun getAllTagNames(): List<String> {
+        return repository.findAll().map { it.name }
+    }
+
     fun getOrSave(name: String): Tag {
         return repository.findByName(name) ?: repository.save(Tag(name))
     }
