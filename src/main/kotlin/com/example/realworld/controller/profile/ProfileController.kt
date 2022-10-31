@@ -21,7 +21,7 @@ class ProfileController(
         @AuthenticationPrincipal jwt: Jwt,
         @PathVariable username: String,
     ): Any {
-        val profileId = profileId(jwt)
+        val profileId = profileId(jwt)!!
         return view(service.getByUsername(profileId, username))
     }
 
@@ -30,7 +30,7 @@ class ProfileController(
         @AuthenticationPrincipal jwt: Jwt,
         @PathVariable username: String,
     ): Any {
-        val profileId = profileId(jwt)
+        val profileId = profileId(jwt)!!
         return view(service.followOrUnfollow(profileId, username))
     }
 
