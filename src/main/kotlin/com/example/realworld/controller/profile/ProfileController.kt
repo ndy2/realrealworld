@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RequestMethod.DELETE
 import org.springframework.web.bind.annotation.RequestMethod.POST
 
+@PreAuthorize("isAuthenticated()")
 @RequestMapping("/api/profiles")
 @RestController
 class ProfileController(
     private val service: ProfileService
 ) {
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{username}")
     fun profile(
         @AuthenticationPrincipal jwt: Jwt,
@@ -25,7 +25,6 @@ class ProfileController(
         return view(service.getByUsername(profileId, username))
     }
 
-    @PreAuthorize("isAuthenticated()")
     @RequestMapping("/{username}/follow", method = [POST, DELETE])
     fun followOrUnfollow(
         @AuthenticationPrincipal jwt: Jwt,

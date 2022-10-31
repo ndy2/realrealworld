@@ -9,12 +9,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.*
 
+@PreAuthorize("isAuthenticated()")
 @RequestMapping("/api/user")
 @RestController
 class UserController(
     private val service: UserService
 ) {
-    @PreAuthorize("isAuthenticated()")
     @GetMapping
     fun currentUser(
         @AuthenticationPrincipal jwt: Jwt
@@ -23,7 +23,6 @@ class UserController(
         return view(service.getById(userId).withToken(jwt.tokenValue))
     }
 
-    @PreAuthorize("isAuthenticated()")
     @PutMapping
     fun update(
         @AuthenticationPrincipal jwt: Jwt,

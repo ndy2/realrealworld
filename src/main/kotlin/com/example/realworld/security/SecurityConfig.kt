@@ -42,7 +42,7 @@ class SecurityConfig(
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-            .antMatchers("/", "/h2-console/**", "/error", "*.js").permitAll()
+            .antMatchers("/", "/h2-console/**", "/error", "/**.js", "/**.ico").permitAll()
             .antMatchers(HttpMethod.POST, "/api/users", "/api/users/login").permitAll()
             .anyRequest().authenticated()
             .and()
