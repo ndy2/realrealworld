@@ -2,10 +2,9 @@ package com.example.realworld.domain.article.model
 
 import com.example.realworld.domain.profile.model.Profile
 import com.example.realworld.domain.tag.model.Tag
-import java.time.LocalDateTime
-import java.time.LocalDateTime.now
+import java.time.Instant
+import java.time.Instant.now
 import javax.persistence.*
-import javax.persistence.CascadeType.*
 import javax.persistence.FetchType.LAZY
 
 @Entity
@@ -34,9 +33,9 @@ class Article(
     var slug: String = title.replace(" ", "-")
 
     @Column(name = "createdAt", nullable = false)
-    var createdAt: LocalDateTime = now()
+    var createdAt: Instant = now()
 
     @Column(name = "updatedAt", nullable = false)
-    var updatedAt: LocalDateTime = now()
+    var updatedAt: Instant = now()
 
 }

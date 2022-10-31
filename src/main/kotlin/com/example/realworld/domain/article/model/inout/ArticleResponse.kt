@@ -1,6 +1,6 @@
-package com.example.realworld.domain.tag.model.inout
+package com.example.realworld.domain.article.model.inout
 
-import java.time.LocalDateTime
+import java.time.Instant
 
 data class ArticleResponse(
 
@@ -9,10 +9,10 @@ data class ArticleResponse(
     val description: String,
     val body: String,
     val tagList: List<String>,
-    val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime,
+    val createdAt: Instant,
+    val updatedAt: Instant,
     val favorited: Boolean,
-    val favoriteCount: Long,
+    val favoritesCount: Long,
     val author: AuthorResponse,
 )
 

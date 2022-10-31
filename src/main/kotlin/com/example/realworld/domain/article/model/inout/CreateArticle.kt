@@ -4,7 +4,6 @@ import com.example.realworld.exception.SelfValidating
 import com.fasterxml.jackson.annotation.JsonRootName
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
-import javax.validation.constraints.Size
 
 @JsonRootName("article")
 data class CreateArticle(
