@@ -103,8 +103,4 @@ class SecurityConfig(
         )
     }
 
-    @Bean
-    fun springJwtTokenProvider(): JwtTokenProvider {
-        return JwtTokenProvider(jwtEncoder())
-    }
 }
