@@ -24,9 +24,9 @@ class AuthController(
         @Valid @RequestBody login: Login,
         errors: Errors
     ): Any {
-        try{
+        try {
             return view(service.login(login))
-        } catch (ex: NotFoundException){
+        } catch (ex: NotFoundException) {
             throw BadCredentialsException("login failure!", ex)
         }
     }

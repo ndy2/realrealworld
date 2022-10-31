@@ -1,4 +1,4 @@
-package com.example.realworld.controller.controller
+package com.example.realworld.controller.article
 
 import com.example.realworld.domain.article.model.inout.CreateArticle
 import com.example.realworld.domain.article.service.ArticleService
