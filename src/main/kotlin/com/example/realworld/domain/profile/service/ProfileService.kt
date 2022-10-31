@@ -30,7 +30,7 @@ class ProfileService(
     fun followOrUnfollow(currentUserProfileId: Long, username: String): ProfileResponse {
         val currentUserProfile = getCurrentUserProfile(currentUserProfileId)
 
-        repository.findByUsername(username)?.let {
+        repository.findByUsernameWithFollowing(username)?.let {
             currentUserProfile.followOrUnfollow(it)
             return ProfileResponse(
                 it.username,
