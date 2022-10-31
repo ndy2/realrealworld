@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RequestMethod.DELETE
+import org.springframework.web.bind.annotation.RequestMethod.POST
 import org.springframework.web.bind.annotation.RestController
 
 @PreAuthorize("isAuthenticated()")
@@ -36,6 +39,15 @@ class ArticleController(
     ): Any {
         val profileId = profileId(jwt)
         return view(service.getBySlug(profileId, slug))
+    }
+
+    @RequestMapping("/{slug}/favorite", method = [POST, DELETE])
+    fun favorite(
+        @AuthenticationPrincipal jwt: Jwt,
+        @PathVariable slug: String
+    ): Any {
+        val profileId = profileId(jwt)
+        return view(service.favoriteOrUnfavorite(profileId, slug))
     }
 
     private fun view(articleResponse: Any): Any = mapOf("article" to articleResponse)

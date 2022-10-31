@@ -1,5 +1,6 @@
 package com.example.realworld.domain.profile.model
 
+import com.example.realworld.domain.article.model.Article
 import javax.persistence.*
 
 @Table(name = "profile")
@@ -26,6 +27,14 @@ class Profile(
     )
     var following: MutableSet<Profile> = mutableSetOf()
 
+    @ManyToMany
+    @JoinTable(
+        name = "favorite",
+        joinColumns = [JoinColumn(name = "profile_id")],
+        inverseJoinColumns = [JoinColumn(name = "article_id")]
+    )
+    var favorites: MutableSet<Article> = mutableSetOf()
+
     fun update(username: String?, bio: String?, image: String?) {
         if (username != null) this.username = username
         if (bio != null) this.bio = bio
@@ -41,6 +50,20 @@ class Profile(
             following.remove(profile)
         } else {
             following.add(profile)
+        }
+    }
+
+    fun isFavorite(article: Article): Boolean {
+        return favorites.contains(article)
+    }
+
+    fun favoriteOrUnfavorite(article: Article) {
+        if (isFavorite(article)) {
+            favorites.remove(article)
+            article.subFavoriteCount()
+        } else {
+            favorites.add(article)
+            article.addFavoriteCount()
         }
     }
 }

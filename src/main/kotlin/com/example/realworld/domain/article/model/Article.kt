@@ -38,6 +38,11 @@ class Article(
     @Column(name = "updatedAt", nullable = false)
     var updatedAt: Instant = now()
 
+    @Column(name = "favorite_count", nullable = false)
+    var favoriteCount: Long = 0L
+
+    @Version
+    val version: Long = 0L
 
     val authorUsername: String
         get() = author.username
@@ -46,4 +51,11 @@ class Article(
     val authorImage: String?
         get() = author.image
 
+    fun addFavoriteCount() {
+        favoriteCount += 1
+    }
+
+    fun subFavoriteCount() {
+        favoriteCount -= 1
+    }
 }

@@ -5,7 +5,6 @@ import com.example.realworld.domain.article.model.inout.ArticleResponse
 import com.example.realworld.domain.article.model.inout.AuthorResponse
 import com.example.realworld.domain.article.model.inout.CreateArticle
 import com.example.realworld.domain.article.repository.ArticleRepository
-import com.example.realworld.domain.profile.model.inout.ProfileResponse
 import com.example.realworld.domain.profile.repository.ProfileRepository
 import com.example.realworld.domain.tag.service.TagService
 import com.example.realworld.exception.NotFoundException
@@ -48,7 +47,7 @@ class ArticleService(
     }
 
     fun getBySlug(profileId: Long, slug: String): ArticleResponse {
-        val currentUserProfile = findProfileWithFollowing(profileId)
+        val currentUserProfile = findProfileWithFollowingAndFavorite(profileId)
         repository.findBySlugWithAuthorAndTag(slug)?.let {
             return ArticleResponse(
                 it.slug,
@@ -58,8 +57,8 @@ class ArticleService(
                 it.tags.map { it.name },
                 it.createdAt,
                 it.updatedAt,
-                false,
-                0L,
+                currentUserProfile.isFavorite(it),
+                it.favoriteCount,
                 AuthorResponse(
                     it.authorUsername,
                     it.authorBio,
@@ -74,7 +73,35 @@ class ArticleService(
     private fun findProfile(profileId: Long) =
         profileRepository.findByProfileId(profileId) ?: throw NotFoundException("no such profile id : $profileId")
 
-    private fun findProfileWithFollowing(profileId: Long) =
-        profileRepository.findByProfileId(profileId) ?: throw NotFoundException("no such profile id : $profileId")
+    private fun findProfileWithFollowingAndFavorite(profileId: Long) =
+        profileRepository.findByIdWithFollowingAndFavorite(profileId)
+            ?: throw NotFoundException("no such profile id : $profileId")
+
+    @Transactional
+    fun favoriteOrUnfavorite(profileId: Long, slug: String): ArticleResponse {
+        val currentUserProfile = findProfileWithFollowingAndFavorite(profileId)
+        repository.findBySlugWithAuthorAndTag(slug)?.let {
+            currentUserProfile.favoriteOrUnfavorite(it)
+
+            return ArticleResponse(
+                it.slug,
+                it.title,
+                it.description,
+                it.body,
+                it.tags.map { it.name },
+                it.createdAt,
+                it.updatedAt,
+                currentUserProfile.isFavorite(it),
+                it.favoriteCount,
+                AuthorResponse(
+                    it.authorUsername,
+                    it.authorBio,
+                    it.authorImage,
+                    currentUserProfile.isFollowing(it.author)
+                )
+            )
+        }
+        throw NotFoundException("no such article slug : $slug")
+    }
 
 }

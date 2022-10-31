@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query
 
 interface ProfileRepository : JpaRepository<Profile, Long> {
 
+    fun findByUsername(username: String): Profile?
+
     //@formatter:off
     @Query(
         "select p " +
@@ -15,23 +17,22 @@ interface ProfileRepository : JpaRepository<Profile, Long> {
     //@formatter:on
     fun findByProfileId(id: Long): Profile?
 
-    fun findByUsername(username: String): Profile?
-
     //@formatter:off
     @Query(
         "select p " +
         "from Profile p " +
-        "join fetch p.following f " +
+        "left join fetch p.following fo " +
+        "left join fetch p.favorites fa " +
         "where p.id = :id"
     )
     //@formatter:on
-    fun findByIdWithFollowing(id: Long): Profile?
+    fun findByIdWithFollowingAndFavorite(id: Long): Profile?
 
     //@formatter:off
     @Query(
         "select p " +
         "from Profile p " +
-        "join fetch p.following f " +
+        "left join fetch p.following f " +
         "where p.username = :username"
     )
     //@formatter:on
