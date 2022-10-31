@@ -5,9 +5,11 @@ import com.example.realworld.domain.article.model.inout.ArticleResponse
 import com.example.realworld.domain.article.model.inout.AuthorResponse
 import com.example.realworld.domain.article.model.inout.CreateArticle
 import com.example.realworld.domain.article.repository.ArticleRepository
+import com.example.realworld.domain.profile.model.inout.ArticleSearchCond
 import com.example.realworld.domain.profile.repository.ProfileRepository
 import com.example.realworld.domain.tag.service.TagService
 import com.example.realworld.exception.NotFoundException
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -46,8 +48,9 @@ class ArticleService(
         )
     }
 
-    fun getBySlug(profileId: Long, slug: String): ArticleResponse {
-        val currentUserProfile = findProfileWithFollowingAndFavorite(profileId)
+    fun getBySlug(profileId: Long?, slug: String): ArticleResponse {
+        val currentUserProfile = profileId?.let { findProfileWithFollowingAndFavorite(it) }
+
         repository.findBySlugWithAuthorAndTag(slug)?.let {
             return ArticleResponse(
                 it.slug,
@@ -57,13 +60,13 @@ class ArticleService(
                 it.tags.map { it.name },
                 it.createdAt,
                 it.updatedAt,
-                currentUserProfile.isFavorite(it),
+                currentUserProfile?.isFavorite(it) ?: false,
                 it.favoriteCount,
                 AuthorResponse(
                     it.authorUsername,
                     it.authorBio,
                     it.authorImage,
-                    currentUserProfile.isFollowing(it.author)
+                    currentUserProfile?.isFollowing(it.author) ?: false
                 )
             )
         }
@@ -102,6 +105,10 @@ class ArticleService(
             )
         }
         throw NotFoundException("no such article slug : $slug")
+    }
+
+    fun getList(profileId: Long?, searchCond: ArticleSearchCond, pageable: Pageable): List<ArticleResponse> {
+        TODO("Not yet implemented")
     }
 
 }
