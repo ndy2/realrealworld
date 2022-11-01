@@ -2,6 +2,7 @@ package com.example.realworld.domain.article.model
 
 import com.example.realworld.domain.profile.model.Profile
 import com.example.realworld.domain.tag.model.Tag
+import org.hibernate.annotations.BatchSize
 import java.time.Instant
 import java.time.Instant.now
 import javax.persistence.*
@@ -19,6 +20,7 @@ class Article(
     var body: String,
 
     @ManyToMany
+    @BatchSize(size = 20)
     var tags: MutableList<Tag> = mutableListOf(),
 
     @ManyToOne(fetch = LAZY)
