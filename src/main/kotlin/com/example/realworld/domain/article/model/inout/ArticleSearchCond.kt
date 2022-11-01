@@ -1,4 +1,4 @@
-package com.example.realworld.domain.profile.model.inout
+package com.example.realworld.domain.article.model.inout
 
 data class ArticleSearchCond(
 

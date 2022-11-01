@@ -1,12 +1,15 @@
 package com.example.realworld.controller.article
 
+import com.example.realworld.domain.article.model.inout.ArticleResponse
 import com.example.realworld.domain.article.model.inout.CreateArticle
 import com.example.realworld.domain.article.model.inout.UpdateArticle
 import com.example.realworld.domain.article.service.ArticleService
-import com.example.realworld.domain.profile.model.inout.ArticleSearchCond
+import com.example.realworld.domain.article.model.inout.ArticleSearchCond
 import com.example.realworld.util.profileId
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
+import org.springframework.http.ResponseEntity
+import org.springframework.http.ResponseEntity.noContent
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
@@ -56,9 +59,10 @@ class ArticleController(
     fun delete(
         @AuthenticationPrincipal jwt: Jwt,
         @PathVariable slug: String
-    ): Any {
+    ): ResponseEntity<*> {
         val profileId = profileId(jwt)!!
-        return view(service.delete(profileId, slug))
+        service.delete(profileId, slug)
+        return noContent().build<Any>()
     }
 
     @GetMapping
@@ -68,7 +72,10 @@ class ArticleController(
         @PageableDefault pageable: Pageable
     ): Any {
         val profileId = profileId(jwt)
-        return view(service.getList(profileId, searchCond, pageable))
+        val articleResponse = service.getList(profileId, searchCond, pageable)
+        searchCond.tag?.let { articleResponse.forEach {it.reorderTags(searchCond.tag)} }
+
+        return viewList(articleResponse)
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -79,7 +86,10 @@ class ArticleController(
         @PageableDefault pageable: Pageable
     ): Any {
         val profileId = profileId(jwt)!!
-        return view(service.getFeedList(profileId, searchCond, pageable))
+        val articleResponse = service.getFeedList(profileId, searchCond, pageable)
+        searchCond.tag?.let { articleResponse.forEach {it.reorderTags(searchCond.tag)} }
+
+        return viewList(articleResponse)
     }
 
 
@@ -93,5 +103,9 @@ class ArticleController(
         return view(service.favoriteOrUnfavorite(profileId, slug))
     }
 
-    private fun view(articleResponse: Any): Any = mapOf("article" to articleResponse)
+    private fun view(articleResponse: ArticleResponse): Any = mapOf("article" to articleResponse)
+    private fun viewList(articleResponse: List<ArticleResponse>): Any = mapOf(
+        "articles" to articleResponse,
+        "articlesCount" to articleResponse.size
+    )
 }

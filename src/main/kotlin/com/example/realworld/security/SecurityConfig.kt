@@ -44,7 +44,6 @@ class SecurityConfig(
             .authorizeRequests()
             .antMatchers("/", "/h2-console/**", "/error", "/**.js", "/**.ico").permitAll()
             .antMatchers(HttpMethod.POST, "/api/users", "/api/users/login").permitAll()
-            .anyRequest().authenticated()
             .and()
             .userDetailsService(userDetailsService)
             .oauth2ResourceServer()

@@ -2,13 +2,12 @@ package com.example.realworld.domain.article.repository
 
 import com.example.realworld.domain.article.model.Article
 import com.example.realworld.domain.profile.model.Profile
-import com.example.realworld.domain.profile.model.inout.ArticleSearchCond
+import com.example.realworld.domain.article.model.inout.ArticleSearchCond
 import com.example.realworld.domain.tag.model.Tag
 import com.example.realworld.domain.tag.repository.TagRepository
 import com.example.realworld.domain.user.model.User
 import com.example.realworld.domain.user.repository.UserRepository
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

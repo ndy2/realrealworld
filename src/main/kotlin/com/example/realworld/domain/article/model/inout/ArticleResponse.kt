@@ -1,6 +1,7 @@
 package com.example.realworld.domain.article.model.inout
 
 import java.time.Instant
+import java.util.*
 
 data class ArticleResponse(
 
@@ -14,11 +15,17 @@ data class ArticleResponse(
     val favorited: Boolean,
     val favoritesCount: Long,
     val author: AuthorResponse,
-)
+) {
+
+    // move given tag to 0th index
+    fun reorderTags(tag: String) {
+        Collections.swap(tagList, 0, tagList.indexOf(tag))
+    }
+}
 
 data class AuthorResponse(
     val username: String,
-    val bio : String?,
+    val bio: String?,
     val image: String?,
     val following: Boolean
 )

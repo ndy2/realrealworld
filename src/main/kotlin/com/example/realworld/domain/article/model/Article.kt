@@ -31,7 +31,7 @@ class Article(
     @GeneratedValue
     var id: Long = 0L
 
-    @Column(name = "slug", nullable = false)
+    @Column(name = "slug", nullable = false, unique = true)
     var slug: String = updateSlug()
 
     @Column(name = "createdAt", nullable = false)

@@ -3,9 +3,8 @@ package com.example.realworld.domain.article.repository
 import com.example.realworld.common.querydsl.Querydsl5RepositorySupport
 import com.example.realworld.domain.article.model.Article
 import com.example.realworld.domain.article.model.QArticle.article
-import com.example.realworld.domain.profile.model.QProfile
 import com.example.realworld.domain.profile.model.QProfile.*
-import com.example.realworld.domain.profile.model.inout.ArticleSearchCond
+import com.example.realworld.domain.article.model.inout.ArticleSearchCond
 import com.example.realworld.domain.tag.model.QTag.tag
 import org.springframework.data.domain.Pageable
 

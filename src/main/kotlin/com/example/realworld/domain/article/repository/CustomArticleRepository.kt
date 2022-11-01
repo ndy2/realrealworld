@@ -1,7 +1,7 @@
 package com.example.realworld.domain.article.repository
 
 import com.example.realworld.domain.article.model.Article
-import com.example.realworld.domain.profile.model.inout.ArticleSearchCond
+import com.example.realworld.domain.article.model.inout.ArticleSearchCond
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort

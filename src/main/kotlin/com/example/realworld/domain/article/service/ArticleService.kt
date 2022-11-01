@@ -6,7 +6,7 @@ import com.example.realworld.domain.article.model.inout.AuthorResponse
 import com.example.realworld.domain.article.model.inout.CreateArticle
 import com.example.realworld.domain.article.model.inout.UpdateArticle
 import com.example.realworld.domain.article.repository.ArticleRepository
-import com.example.realworld.domain.profile.model.inout.ArticleSearchCond
+import com.example.realworld.domain.article.model.inout.ArticleSearchCond
 import com.example.realworld.domain.profile.repository.ProfileRepository
 import com.example.realworld.domain.tag.service.TagService
 import com.example.realworld.exception.NotFoundException
@@ -146,6 +146,7 @@ class ArticleService(
             }
 
             repository.delete(it)
+            return
         }
         throw NotFoundException("no such article slug : $slug")
     }
