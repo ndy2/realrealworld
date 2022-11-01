@@ -32,7 +32,7 @@ class Article(
     var id: Long = 0L
 
     @Column(name = "slug", nullable = false)
-    var slug: String = title.replace(" ", "-")
+    var slug: String = updateSlug()
 
     @Column(name = "createdAt", nullable = false)
     var createdAt: Instant = now()
@@ -48,10 +48,25 @@ class Article(
 
     val authorUsername: String
         get() = author.username
+
     val authorBio: String?
         get() = author.bio
     val authorImage: String?
         get() = author.image
+
+    fun update(title: String?, description: String?, body: String?) {
+        require(title != null || description != null || body != null)
+        { "require at least one non-null property to update" }
+
+        title?.let {
+            this.title = title
+            this.slug = updateSlug()
+        }
+        description?.let { this.description = description }
+        body?.let { this.body = body }
+
+        this.updatedAt = now()
+    }
 
     fun addFavoriteCount() {
         favoriteCount += 1
@@ -60,4 +75,10 @@ class Article(
     fun subFavoriteCount() {
         favoriteCount -= 1
     }
+
+    fun isWrittenBy(profile: Profile): Boolean {
+        return this.author.id == profile.id
+    }
+
+    private fun updateSlug() = title.replace(" ", "-")
 }

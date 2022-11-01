@@ -4,6 +4,7 @@ import com.example.realworld.domain.article.model.Article
 import com.example.realworld.domain.article.model.inout.ArticleResponse
 import com.example.realworld.domain.article.model.inout.AuthorResponse
 import com.example.realworld.domain.article.model.inout.CreateArticle
+import com.example.realworld.domain.article.model.inout.UpdateArticle
 import com.example.realworld.domain.article.repository.ArticleRepository
 import com.example.realworld.domain.profile.model.inout.ArticleSearchCond
 import com.example.realworld.domain.profile.repository.ProfileRepository
@@ -98,6 +99,53 @@ class ArticleService(
                     currentUserProfile.isFollowing(it.author)
                 )
             )
+        }
+        throw NotFoundException("no such article slug : $slug")
+    }
+
+    @Transactional
+    fun update(profileId: Long, slug: String, updateArticle: UpdateArticle): ArticleResponse {
+        val (title, description, body) = updateArticle
+
+        val currentUserProfile = findProfileWithFollowingAndFavorite(profileId)
+        repository.findBySlugWithAuthorAndTag(slug)?.let {
+            if (!it.isWrittenBy(currentUserProfile)) {
+                throw NotFoundException("no such article slug : $slug")
+            }
+
+            it.update(title, description, body)
+
+            return ArticleResponse(
+                it.slug,
+                it.title,
+                it.description,
+                it.body,
+                it.tags.map { it.name },
+                it.createdAt,
+                it.updatedAt,
+                currentUserProfile.isFavorite(it),
+                it.favoriteCount,
+                AuthorResponse(
+                    it.authorUsername,
+                    it.body,
+                    it.authorImage,
+                    currentUserProfile.isFollowing(it.author)
+                )
+            )
+
+        }
+        throw NotFoundException("no such article slug : $slug")
+    }
+
+    @Transactional
+    fun delete(profileId: Long, slug: String) {
+        val currentUserProfile = findProfileWithFollowingAndFavorite(profileId)
+        repository.findBySlugWithAuthorAndTag(slug)?.let {
+            if (!it.isWrittenBy(currentUserProfile)) {
+                throw NotFoundException("no such article slug : $slug")
+            }
+
+            repository.delete(it)
         }
         throw NotFoundException("no such article slug : $slug")
     }

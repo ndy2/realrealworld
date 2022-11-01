@@ -1,6 +1,7 @@
 package com.example.realworld.controller.article
 
 import com.example.realworld.domain.article.model.inout.CreateArticle
+import com.example.realworld.domain.article.model.inout.UpdateArticle
 import com.example.realworld.domain.article.service.ArticleService
 import com.example.realworld.domain.profile.model.inout.ArticleSearchCond
 import com.example.realworld.util.profileId
@@ -9,15 +10,9 @@ import org.springframework.data.web.PageableDefault
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RequestMethod.DELETE
 import org.springframework.web.bind.annotation.RequestMethod.POST
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
 
 @RequestMapping("/api/articles")
 @RestController
@@ -42,6 +37,28 @@ class ArticleController(
     ): Any {
         val profileId = profileId(jwt)
         return view(service.getBySlug(profileId, slug))
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/{slug}")
+    fun update(
+        @AuthenticationPrincipal jwt: Jwt,
+        @PathVariable slug: String,
+        @RequestBody updateArticle: UpdateArticle
+    ): Any {
+        val profileId = profileId(jwt)!!
+        return view(service.update(profileId, slug, updateArticle))
+    }
+
+
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/{slug}")
+    fun delete(
+        @AuthenticationPrincipal jwt: Jwt,
+        @PathVariable slug: String
+    ): Any {
+        val profileId = profileId(jwt)!!
+        return view(service.delete(profileId, slug))
     }
 
     @GetMapping
