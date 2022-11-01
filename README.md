@@ -1,4 +1,4 @@
-# ![RealWorld Example App](https://raw.githubusercontent.com/gothinkster/realworld-starter-kit/master/logo.png)
+# ![RealWorld Example App](https://github.com/raeperd/realworld-springboot-kotlin/blob/master/logo.png?raw=true)
 
 # Getting started
 
