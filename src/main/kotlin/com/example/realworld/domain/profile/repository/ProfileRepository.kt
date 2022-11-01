@@ -4,7 +4,7 @@ import com.example.realworld.domain.profile.model.Profile
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
-interface ProfileRepository : JpaRepository<Profile, Long>, CustomProfileRepository {
+interface ProfileRepository : JpaRepository<Profile, Long>{
 
     fun findByUsername(username: String): Profile?
 

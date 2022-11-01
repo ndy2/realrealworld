@@ -47,7 +47,7 @@ class ArticleController(
     @GetMapping
     fun list(
         @AuthenticationPrincipal jwt: Jwt?,
-        @RequestParam searchCond: ArticleSearchCond,
+        searchCond: ArticleSearchCond,
         @PageableDefault pageable: Pageable
     ): Any {
         val profileId = profileId(jwt)

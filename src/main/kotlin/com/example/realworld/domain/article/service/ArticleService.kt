@@ -23,7 +23,9 @@ class ArticleService(
     @Transactional
     fun create(profileId: Long, createArticle: CreateArticle): ArticleResponse {
         val (title, description, body, _) = createArticle
-        val tags = (createArticle.tagList ?: emptyList()).map { tagService.getOrSave(it) }
+        val tags = (createArticle.tagList ?: emptyList())
+            .map { tagService.getOrSave(it) }
+            .toMutableList()
         val author = findProfile(profileId)
 
         val article = Article(title, description, body, tags, author)
@@ -108,7 +110,25 @@ class ArticleService(
     }
 
     fun getList(profileId: Long?, searchCond: ArticleSearchCond, pageable: Pageable): List<ArticleResponse> {
-        TODO("Not yet implemented")
+        val currentUserProfile = profileId?.let { findProfileWithFollowingAndFavorite(it) }
+        return repository.findBySearchCond(searchCond, pageable).map {
+            ArticleResponse(
+                it.slug,
+                it.title,
+                it.description,
+                it.body,
+                it.tags.map { it.name },
+                it.createdAt,
+                it.updatedAt,
+                currentUserProfile?.isFavorite(it) ?: false,
+                it.favoriteCount,
+                AuthorResponse(
+                    it.authorUsername,
+                    it.authorBio,
+                    it.authorImage,
+                    currentUserProfile?.isFollowing(it.author) ?: false
+                )
+            )
+        }
     }
-
 }

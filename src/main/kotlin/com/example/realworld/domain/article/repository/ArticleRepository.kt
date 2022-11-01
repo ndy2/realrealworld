@@ -4,7 +4,7 @@ import com.example.realworld.domain.article.model.Article
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
-interface ArticleRepository : JpaRepository<Article, Long> {
+interface ArticleRepository : JpaRepository<Article, Long>, CustomArticleRepository {
 
     //@formatter:off
     @Query(

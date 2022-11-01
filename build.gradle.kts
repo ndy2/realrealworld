@@ -4,17 +4,18 @@ plugins {
     id("org.springframework.boot") version "2.7.5"
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
 
-    kotlin("jvm") version "1.6.21"
-    kotlin("plugin.spring") version "1.6.21"
-    kotlin("plugin.jpa") version "1.6.21"
-    kotlin("kapt") version "1.4.10" // querydsl
+    val kotlinVersion = "1.6.21"
+
+    kotlin("jvm") version kotlinVersion
+    kotlin("plugin.spring") version kotlinVersion
+    kotlin("plugin.jpa") version kotlinVersion
+    kotlin("kapt") version kotlinVersion
 }
-kapt {
-    correctErrorTypes = true
-}
+
 group = "com.example"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
+val qeurydslVersion = "5.0.0"
 
 repositories {
     mavenCentral()
@@ -34,11 +35,11 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
 
-    implementation("com.querydsl:querydsl-jpa:5.0.0")
-    kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-    annotationProcessor(group = "com.querydsl", name = "querydsl-apt", classifier = "jpa")
-
+    // QueryDSL
+    implementation("com.querydsl:querydsl-jpa:$qeurydslVersion")
+    kapt("com.querydsl:querydsl-apt:$qeurydslVersion:jpa")
+    kapt("javax.persistence:javax.persistence-api")
+    kapt("org.springframework.boot:spring-boot-configuration-processor")
 }
 
 tasks.withType<KotlinCompile> {

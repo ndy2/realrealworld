@@ -19,7 +19,7 @@ class Article(
     var body: String,
 
     @ManyToMany
-    var tags: List<Tag> = mutableListOf(),
+    var tags: MutableList<Tag> = mutableListOf(),
 
     @ManyToOne(fetch = LAZY)
     var author: Profile
