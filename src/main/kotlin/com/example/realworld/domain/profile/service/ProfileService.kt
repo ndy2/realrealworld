@@ -12,6 +12,7 @@ class ProfileService(
     private val repository: ProfileRepository
 ) {
 
+    @Transactional(readOnly = true)
     fun getByUsername(currentUserProfileId: Long, username: String): ProfileResponse {
         val currentUserProfile = getCurrentUserProfile(currentUserProfileId)
 
@@ -20,7 +21,7 @@ class ProfileService(
                 it.username,
                 it.bio,
                 it.image,
-                it.isFollowing(currentUserProfile)
+                currentUserProfile.isFollowing(it)
             )
         }
         throw NotFoundException()
@@ -30,7 +31,7 @@ class ProfileService(
     fun followOrUnfollow(currentUserProfileId: Long, username: String): ProfileResponse {
         val currentUserProfile = getCurrentUserProfile(currentUserProfileId)
 
-        repository.findByUsernameWithFollowing(username)?.let {
+        repository.findByUsername(username)?.let {
             currentUserProfile.followOrUnfollow(it)
             return ProfileResponse(
                 it.username,
@@ -42,7 +43,7 @@ class ProfileService(
         throw NotFoundException()
     }
 
-    private fun getCurrentUserProfile(currentUserProfileId: Long) : Profile {
-        return repository.findByProfileId(currentUserProfileId) ?: throw NotFoundException()
+    private fun getCurrentUserProfile(currentUserProfileId: Long): Profile {
+        return repository.findByIdWithFollowing(currentUserProfileId) ?: throw NotFoundException()
     }
 }

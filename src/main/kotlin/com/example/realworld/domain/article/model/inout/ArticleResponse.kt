@@ -4,7 +4,6 @@ import java.time.Instant
 import java.util.*
 
 data class ArticleResponse(
-
     val slug: String,
     val title: String,
     val description: String,
@@ -23,9 +22,3 @@ data class ArticleResponse(
     }
 }
 
-data class AuthorResponse(
-    val username: String,
-    val bio: String?,
-    val image: String?,
-    val following: Boolean
-)

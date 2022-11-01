@@ -33,8 +33,8 @@ interface ProfileRepository : JpaRepository<Profile, Long>{
         "select p " +
         "from Profile p " +
         "left join fetch p.following f " +
-        "where p.username = :username"
+        "where p.id = :profileId"
     )
     //@formatter:on
-    fun findByUsernameWithFollowing(username: String): Profile?
+    fun findByIdWithFollowing(profileId: Long): Profile?
 }

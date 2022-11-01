@@ -140,15 +140,14 @@ class ArticleService(
     @Transactional
     fun delete(profileId: Long, slug: String) {
         val currentUserProfile = findProfileWithFollowingAndFavorite(profileId)
-        repository.findBySlugWithAuthorAndTag(slug)?.let {
-            if (!it.isWrittenBy(currentUserProfile)) {
-                throw NotFoundException("no such article slug : $slug")
-            }
+        val article = repository.findBySlugWithAuthorAndTag(slug)
+            ?: throw NotFoundException("no such article slug : $slug")
 
-            repository.delete(it)
-            return
+        if (!article.isWrittenBy(currentUserProfile)) {
+            throw NotFoundException("no such article slug : $slug")
         }
-        throw NotFoundException("no such article slug : $slug")
+
+        repository.delete(article)
     }
 
     fun getList(profileId: Long?, searchCond: ArticleSearchCond, pageable: Pageable): List<ArticleResponse> {

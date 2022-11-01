@@ -16,4 +16,6 @@ interface ArticleRepository : JpaRepository<Article, Long>, CustomArticleReposit
     )
     //@formatter:on
     fun findBySlugWithAuthorAndTag(slug: String): Article?
+
+    fun findBySlug(slug: String): Article?
 }

@@ -26,7 +26,6 @@ class Article(
     @ManyToOne(fetch = LAZY)
     var author: Profile
 ) {
-
     @Id
     @GeneratedValue
     var id: Long = 0L
