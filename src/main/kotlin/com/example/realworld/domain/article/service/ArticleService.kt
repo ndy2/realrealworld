@@ -75,13 +75,6 @@ class ArticleService(
         throw NotFoundException("no such article slug : $slug")
     }
 
-    private fun findProfile(profileId: Long) =
-        profileRepository.findByProfileId(profileId) ?: throw NotFoundException("no such profile id : $profileId")
-
-    private fun findProfileWithFollowingAndFavorite(profileId: Long) =
-        profileRepository.findByIdWithFollowingAndFavorite(profileId)
-            ?: throw NotFoundException("no such profile id : $profileId")
-
     @Transactional
     fun favoriteOrUnfavorite(profileId: Long, slug: String): ArticleResponse {
         val currentUserProfile = findProfileWithFollowingAndFavorite(profileId)
@@ -131,4 +124,38 @@ class ArticleService(
             )
         }
     }
+
+    fun getFeedList(profileId: Long, searchCond: ArticleSearchCond, pageable: Pageable): List<ArticleResponse> {
+        val currentUserProfile = findProfileWithFollowingAndFavorite(profileId)
+        return repository.findFeedBySearchCond(
+            currentUserProfile.following.map { it.id },
+            searchCond,
+            pageable
+        ).map {
+            ArticleResponse(
+                it.slug,
+                it.title,
+                it.description,
+                it.body,
+                it.tags.map { it.name },
+                it.createdAt,
+                it.updatedAt,
+                currentUserProfile.isFavorite(it),
+                it.favoriteCount,
+                AuthorResponse(
+                    it.authorUsername,
+                    it.authorBio,
+                    it.authorImage,
+                    true
+                )
+            )
+        }
+    }
+
+    private fun findProfile(profileId: Long) =
+        profileRepository.findByProfileId(profileId) ?: throw NotFoundException("no such profile id : $profileId")
+
+    private fun findProfileWithFollowingAndFavorite(profileId: Long) =
+        profileRepository.findByIdWithFollowingAndFavorite(profileId)
+            ?: throw NotFoundException("no such profile id : $profileId")
 }

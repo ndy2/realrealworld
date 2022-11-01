@@ -36,9 +36,9 @@ class Profile(
     var favorites: MutableSet<Article> = mutableSetOf()
 
     fun update(username: String?, bio: String?, image: String?) {
-        if (username != null) this.username = username
-        if (bio != null) this.bio = bio
-        if (image != null) this.image = image
+        username?.let { this.username = username }
+        bio?.let { this.bio = bio }
+        image?.let { this.image = image }
     }
 
     fun isFollowing(profile: Profile): Boolean {
@@ -46,6 +46,7 @@ class Profile(
     }
 
     fun followOrUnfollow(profile: Profile) {
+        require(this.id != profile.id) { "you can follow/unfollow your self" }
         if (isFollowing(profile)) {
             following.remove(profile)
         } else {

@@ -12,4 +12,10 @@ interface CustomArticleRepository {
         searchCond: ArticleSearchCond = ArticleSearchCond(),
         pageable: Pageable = PageRequest.of(0, 20, Sort.Direction.DESC, "id")
     ): List<Article>
+
+    fun findFeedBySearchCond(
+        followingIds: List<Long>,
+        searchCond: ArticleSearchCond = ArticleSearchCond(),
+        pageable: Pageable = PageRequest.of(0, 20, Sort.Direction.DESC, "id")
+    ): List<Article>
 }

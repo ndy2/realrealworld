@@ -44,8 +44,8 @@ class User(
         bio: String?,
         image: String?
     ) {
-        if (email != null) this.email = email
-        if (password != null) this.password = password
+        email?.let { this.email = email }
+        password?.let { this.password = password }
 
         profile.update(username, bio, image)
     }

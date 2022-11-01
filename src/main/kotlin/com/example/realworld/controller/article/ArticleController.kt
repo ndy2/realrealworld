@@ -55,6 +55,18 @@ class ArticleController(
     }
 
     @PreAuthorize("isAuthenticated()")
+    @GetMapping("/feed")
+    fun feed(
+        @AuthenticationPrincipal jwt: Jwt,
+        searchCond: ArticleSearchCond,
+        @PageableDefault pageable: Pageable
+    ): Any {
+        val profileId = profileId(jwt)!!
+        return view(service.getFeedList(profileId, searchCond, pageable))
+    }
+
+
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping("/{slug}/favorite", method = [POST, DELETE])
     fun favoriteOrUnfavorite(
         @AuthenticationPrincipal jwt: Jwt,
