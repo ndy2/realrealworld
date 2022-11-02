@@ -1,4 +1,4 @@
-package com.example.realworld.security.token
+package com.example.realworld.config.jwt
 
 import org.springframework.http.HttpHeaders
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException

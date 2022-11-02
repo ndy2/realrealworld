@@ -22,6 +22,7 @@ repositories {
 }
 
 dependencies {
+
     implementation("org.springframework.boot:spring-boot-starter-validation:2.7.5")
     implementation ("io.github.microutils:kotlin-logging-jvm:3.0.2")
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -34,6 +35,7 @@ dependencies {
     runtimeOnly("com.h2database:h2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
+    annotationProcessor ("org.springframework.boot:spring-boot-configuration-processor")
 
     // QueryDSL
     implementation("com.querydsl:querydsl-jpa:$qeurydslVersion")

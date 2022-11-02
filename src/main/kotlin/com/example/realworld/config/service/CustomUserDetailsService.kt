@@ -1,4 +1,4 @@
-package com.example.realworld.security.service
+package com.example.realworld.config.service
 
 import com.example.realworld.domain.user.repository.UserRepository
 import com.example.realworld.exception.NotFoundException

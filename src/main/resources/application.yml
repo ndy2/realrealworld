@@ -20,3 +20,8 @@ spring:
   jackson:
     deserialization:
       unwrap-root-value: true
+
+jwt:
+  public-key: certs/apiKey.jks
+  alias: apiKey
+  password: pass1234

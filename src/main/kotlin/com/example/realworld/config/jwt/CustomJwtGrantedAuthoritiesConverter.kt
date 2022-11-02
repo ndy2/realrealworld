@@ -1,4 +1,4 @@
-package com.example.realworld.security.token
+package com.example.realworld.config.jwt
 
 import org.springframework.core.convert.converter.Converter
 import org.springframework.security.core.GrantedAuthority

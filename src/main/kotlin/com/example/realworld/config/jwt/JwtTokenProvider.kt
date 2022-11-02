@@ -1,4 +1,4 @@
-package com.example.realworld.security.token
+package com.example.realworld.config.jwt
 
 import com.example.realworld.domain.user.model.User
 import com.example.realworld.domain.user.service.TokenProvider
