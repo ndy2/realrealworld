@@ -8,6 +8,12 @@ import org.springframework.util.StringUtils
 import java.util.regex.Pattern
 import javax.servlet.http.HttpServletRequest
 
+/**
+ * 커스텀 토큰 리졸버
+ * Authorization: Token jwt.token.here -> jwt.token.here
+ *
+ * @see <a href="https://realworld-docs.netlify.app/docs/specs/backend-specs/endpoints#authentication-header">링크</a>
+ */
 class CustomBearerTokenResolver : BearerTokenResolver {
 
     private val authorizationPattern = Pattern.compile(

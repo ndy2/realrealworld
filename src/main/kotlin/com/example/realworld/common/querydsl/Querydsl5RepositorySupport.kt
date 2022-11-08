@@ -18,13 +18,16 @@ import java.util.function.Supplier
 import javax.persistence.EntityManager
 
 
+/**
+ * Querydsl 리포지토리 서포트
+ */
 abstract class Querydsl5RepositorySupport(
     val domainClass: Class<*>
 ) {
 
-    protected lateinit var querydsl: Querydsl
-    protected lateinit var em: EntityManager
-    protected lateinit var queryFactory: JPAQueryFactory
+    private lateinit var querydsl: Querydsl
+    private lateinit var em: EntityManager
+    private lateinit var queryFactory: JPAQueryFactory
 
     @Autowired
     fun doLateInit(em: EntityManager) {

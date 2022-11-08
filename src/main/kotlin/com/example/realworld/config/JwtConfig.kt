@@ -20,7 +20,6 @@ class JwtConfig(
     private val jwtProperties: JwtProperties
 ) {
 
-
     @Bean
     fun jwtDecoder(): JwtDecoder? {
         val keyPair = generateRsaKeyPair()
